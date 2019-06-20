@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class Book extends Component {
   moveBook = (event) => {
-    this.props.moveToShelf(this.props.book.shelf, event.target.value, this.props.book);
+    this.props.moveFromToShelf(this.props.book.shelf, event.target.value, this.props.book);
   }
 
   render() {
