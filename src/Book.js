@@ -8,7 +8,7 @@ class Book extends Component {
   render() {
     return <div className="book">
       <div className="book-top">
-        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.book.imageLinks.smallThumbnail})` }}></div>
+        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.book.imageLinks ? this.props.book.imageLinks.smallThumbnail : `https://static.thenounproject.com/png/140281-200.png`})` }}></div>
         <div className="book-shelf-changer">
           <select value={this.props.book.shelf} onChange={this.moveBook}>
             <option value="move" disabled>Move to...</option>

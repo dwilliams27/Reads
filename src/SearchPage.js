@@ -12,7 +12,7 @@ class SearchPage extends Component {
   handleChange = (event) => {
     if(event) {
       BooksAPI.search(event.target.value).then((response) => {
-        console.log(response);
+        //console.log(response);
         if(response && !response.error) {
           this.setState({
             books: response
