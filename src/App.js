@@ -41,7 +41,6 @@ class BooksApp extends React.Component {
   }
 
   moveFromToShelf = (fromShelf, toShelf, book) => {
-    console.log(fromShelf);
     book.shelf = toShelf;
     let newFromShelf = this.state[fromShelf];
     let newToShelf = this.state[toShelf];
@@ -80,7 +79,6 @@ class BooksApp extends React.Component {
     } else {
       newToShelf.push(book);
       this.setState(prevState => {
-        console.log(prevState);
         return {
           [toShelf]: newToShelf,
           saved: [...prevState.saved, book]
@@ -89,7 +87,7 @@ class BooksApp extends React.Component {
       })
     }
     BooksAPI.update({ id: book.id }, toShelf).then((response) => {
-      console.log(response);
+      //console.log(response);
     })
   }
 
