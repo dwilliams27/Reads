@@ -9,7 +9,8 @@ class BooksApp extends React.Component {
   state = {
     wantToRead: [],
     currentlyReading: [],
-    read: []
+    read: [],
+    saved: []
   }
   
   componentDidMount() {
@@ -34,28 +35,58 @@ class BooksApp extends React.Component {
     this.setState({
       wantToRead: wantToRead,
       currentlyReading: currentlyReading,
-      read: read
+      read: read,
+      saved: books
     });
   }
 
-  moveToShelf = (book, shelf) => {
-
-  }
-
   moveFromToShelf = (fromShelf, toShelf, book) => {
+    console.log(fromShelf);
+    book.shelf = toShelf;
     let newFromShelf = this.state[fromShelf];
     let newToShelf = this.state[toShelf];
-    for(let [index, b] of newFromShelf.entries()) {
-      if(b.id === book.id) {
-        b.shelf = toShelf;
-        newFromShelf.splice(index, 1);
-        newToShelf.push(b);
-        this.setState({
-          [fromShelf]: newFromShelf,
-          [toShelf]: newToShelf
-        })
-        break;
+    if(newFromShelf) {
+      for(let [index, b] of newFromShelf.entries()) {
+        if(b.id === book.id) {
+          b.shelf = toShelf;
+          newFromShelf.splice(index, 1);
+          break;
+        }
       }
+      if(newToShelf) {
+        if(newToShelf.filter(b => b.id === book.id).length === 0) {
+          newToShelf.push(book);
+        }
+        this.setState(prevState => {
+          return {
+            [fromShelf]: newFromShelf,
+            [toShelf]: newToShelf,
+            saved: prevState.saved.map(b => {
+              if(b.id === book.id) {
+                return {...b, shelf: book.shelf}
+              }
+              return b;
+            })
+          }
+        });
+      } else {
+        this.setState(prevState => {
+          return {
+            [fromShelf]: newFromShelf,
+            saved: prevState.saved.filter(b => b.id !== book.id)
+          }
+        });
+      }
+    } else {
+      newToShelf.push(book);
+      this.setState(prevState => {
+        console.log(prevState);
+        return {
+          [toShelf]: newToShelf,
+          saved: [...prevState.saved, book]
+        }
+        
+      })
     }
     BooksAPI.update({ id: book.id }, toShelf).then((response) => {
       console.log(response);
@@ -69,7 +100,7 @@ class BooksApp extends React.Component {
           <BookList wantToRead={this.state.wantToRead} currentlyReading={this.state.currentlyReading} read={this.state.read} moveFromToShelf={this.moveFromToShelf}/>
         }/>
         <Route path='/search' render={() => 
-          <SearchPage />
+          <SearchPage moveFromToShelf={this.moveFromToShelf} savedBooks={this.state.saved}/>
         }/>
       </div>
     )
