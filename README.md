@@ -4,5 +4,6 @@ Lets you save books to three different shelves (Currently reading, Want to read,
 
 ## Running the App
 
+* Download project: `git clone https://github.com/dwilliams27/Reads.git`
 * install all project dependencies with `npm install`
 * start the development server with `npm start`
